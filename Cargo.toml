@@ -5,4 +5,7 @@ edition = "2024"
 
 [dependencies]
 tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros"] }
-topcoat = "0.11.0"
+topcoat = { version = "0.11.0", features = ["icon-iconify", "asset", "ui", "tailwind", "font-fontsource"]}
+
+[build-dependencies]
+topcoat = { version = "0.11.0", default-features = false, features = ["icon-iconify", "tailwind"] }
