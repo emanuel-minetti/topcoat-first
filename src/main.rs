@@ -1,31 +1,57 @@
-mod imprint;
 mod components;
+mod imprint;
 
-use topcoat::{Result, router::{module_router, page}, view::{View, component, view}, tailwind};
+use crate::components::navigation_menu::{
+    navigation_menu, navigation_menu_item, navigation_menu_link, NavigationMenuLinkVariant,
+};
 use topcoat::asset::{asset, Asset, AssetBundle, RouterBuilderAssetExt};
 use topcoat::context::Cx;
-use topcoat::font::Font;
 use topcoat::font::fontsource::fontsource_font;
-use topcoat::router::{href, layout, RouterBuilderDiscoverExt, Slot};
+use topcoat::font::Font;
+use topcoat::l10n::{accept_language, locale, negotiate, Locale};
+use topcoat::router::response::Response;
+use topcoat::router::{href, layer, layout, Body, Next, RouterBuilderDiscoverExt, Slot};
 use topcoat::view::attributes;
-use crate::components::navigation_menu::{navigation_menu, navigation_menu_item, navigation_menu_link, NavigationMenuLinkVariant};
+use topcoat::{
+    router::{module_router, page},
+    tailwind,
+    view::{component, view, View},
+    Result,
+};
+use topcoat::l10n::fluent::messages;
+
+const LOCALES: [Locale; 2] = [locale!("de"), locale!("en")];
+messages!("l10n/{locale}.ftl");
+
 
 #[tokio::main]
 async fn main() {
-    topcoat::start(module_router!()
-        .discover()
-        .assets(AssetBundle::load().unwrap())
-        .build()).await.unwrap();
+    topcoat::start(
+        module_router!()
+            .discover()
+            .assets(AssetBundle::load().unwrap())
+            .build(),
+    )
+    .await
+    .unwrap();
+}
+
+#[layer]
+async fn l10n_layer(cx: &Cx, body: Body, next: Next<'_>) -> Result<Response> {
+    let locale = negotiate(accept_language(cx), &LOCALES)
+        .cloned()
+        .unwrap_or(LOCALES[0].clone());
+    next.run(&cx.with(locale), body).await
 }
 
 #[layout]
-async fn root_layout(cx: &Cx,slot: Slot<'_>) -> Result<impl View> {
+async fn root_layout(cx: &Cx, slot: Slot<'_>) -> Result<impl View> {
     const LOGO: Asset = asset!("assets/logo.svg");
     const GEIST: Font = fontsource_font!(GEIST, host: Asset);
 
     Ok(view! {
         <!DOCTYPE html>
-        <html>
+        <html lang=(locale(cx).id()) dir=(locale(cx).id().direction())>
             <head>
                 <title>"Topcoat First"</title>
                 <link rel="icon" href=(LOGO) type="image/svg+xml">
@@ -48,7 +74,7 @@ async fn root_layout(cx: &Cx,slot: Slot<'_>) -> Result<impl View> {
                             variant: NavigationMenuLinkVariant::Trigger,
                             active: href!(imprint::imprint).is_current(cx),
                             attrs: attributes! { href=(href!(imprint::imprint)) },
-                            "Imprint"
+                            (t!(imprint))
                         )
                     )
                 )
@@ -59,15 +85,15 @@ async fn root_layout(cx: &Cx,slot: Slot<'_>) -> Result<impl View> {
 }
 
 #[page]
-async fn home() -> topcoat::Result<impl View> {
+async fn home(cx: &Cx) -> Result<impl View> {
     Ok(view! {
-        <!DOCTYPE html>
         hello(name: "World")
+        <p>"The page is in: " (locale(cx))</p>
     })
 }
 
 #[component]
-async fn hello(name: &str) -> topcoat::Result<impl View> {
+async fn hello(name: &str) -> Result<impl View> {
     Ok(view! {
         <h1>
             "Hello, "
