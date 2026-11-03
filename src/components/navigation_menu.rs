@@ -52,10 +52,10 @@ pub async fn navigation_menu(
 
     Ok(view! {
         <nav
-            class=(class!("relative flex items-center list-none", attrs.remove("class")))
+            class=(class!("relative flex items-center list-none bg-(--sidebar) pt-3 pb-7 mb-13", attrs.remove("class")))
             (attrs)
         >
-            <a href="/"><img class="h-9" src=(LOGO) alt="the logo"></a>
+            <a href="/"><img class=(class!("h-9 pr-10")) src=(LOGO) alt="the logo"></a>
             (child)
         </nav>
     })

@@ -29,8 +29,8 @@ async fn root_layout(cx: &Cx,slot: Slot<'_>) -> Result<impl View> {
             <head>
                 <title>"Topcoat First"</title>
                 <link rel="icon" href=(LOGO) type="image/svg+xml">
-                <link rel="stylesheet" href=(tailwind::stylesheet!())>
                 topcoat::font::link(font: GEIST)
+                <link rel="stylesheet" href=(tailwind::stylesheet!())>
                 topcoat::dev::script()
             </head>
             <body>
