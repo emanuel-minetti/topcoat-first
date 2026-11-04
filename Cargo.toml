@@ -12,7 +12,8 @@ topcoat = { version = "0.11.0", features = [
     "tailwind",
     "font-fontsource",
     "l10n-fluent",
-    "cookie"]
+    "cookie",
+    "runtime"]
 }
 
 [build-dependencies]

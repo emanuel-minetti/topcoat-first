@@ -17,7 +17,8 @@ use topcoat::{
     tailwind,
     view::{View, component, view},
 };
-use topcoat::cookie::{cookies, Cookie, Cookies, RouterBuilderCookieExt};
+use topcoat::cookie::{cookies, Cookies, RouterBuilderCookieExt};
+use topcoat::runtime::RouterBuilderRuntimeExt;
 
 const LOCALES: [Locale; 2] = [locale!("de"), locale!("en")];
 messages!("l10n/{locale}.ftl");
@@ -29,6 +30,7 @@ async fn main() {
             .discover()
             .assets(AssetBundle::load().unwrap())
             .cookies()
+            .runtime()
             .build(),
     )
     .await
@@ -42,12 +44,9 @@ async fn l10n_layer(cx: &Cx, body: Body, next: Next<'_>) -> Result<Response> {
         .unwrap_or(LOCALES[0].clone());
     let jar = cookies(cx);
     let cookie_locale_option = jar.get("lang");
-    let cookie_locale = match cookie_locale_option {
-        Some(cookie) => {locale = cookie.value().parse()? }
-
-        None => {}
-    };
-    //let cookie_locale = negotiate()
+    if (cookie_locale_option.is_some()) && (cookie_locale_option.clone().unwrap().value() != locale.to_string()) {
+        locale = cookie_locale_option.unwrap().value().parse::<Locale>()?;
+    }
     next.run(&cx.with(locale), body).await
 }
 
@@ -64,6 +63,7 @@ async fn root_layout(cx: &Cx, slot: Slot<'_>) -> Result<impl View> {
                 <link rel="icon" href=(LOGO) type="image/svg+xml">
                 topcoat::font::link(font: GEIST)
                 <link rel="stylesheet" href=(tailwind::stylesheet!())>
+                topcoat::runtime::script()
                 topcoat::dev::script()
             </head>
             <body>
