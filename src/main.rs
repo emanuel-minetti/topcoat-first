@@ -17,6 +17,7 @@ use topcoat::{
     tailwind,
     view::{View, component, view},
 };
+use topcoat::cookie::{cookies, Cookie, Cookies, RouterBuilderCookieExt};
 
 const LOCALES: [Locale; 2] = [locale!("de"), locale!("en")];
 messages!("l10n/{locale}.ftl");
@@ -27,6 +28,7 @@ async fn main() {
         module_router!()
             .discover()
             .assets(AssetBundle::load().unwrap())
+            .cookies()
             .build(),
     )
     .await
@@ -35,9 +37,17 @@ async fn main() {
 
 #[layer]
 async fn l10n_layer(cx: &Cx, body: Body, next: Next<'_>) -> Result<Response> {
-    let locale = negotiate(accept_language(cx), &LOCALES)
+    let mut locale = negotiate(accept_language(cx), &LOCALES)
         .cloned()
         .unwrap_or(LOCALES[0].clone());
+    let jar = cookies(cx);
+    let cookie_locale_option = jar.get("lang");
+    let cookie_locale = match cookie_locale_option {
+        Some(cookie) => {locale = cookie.value().parse()? }
+
+        None => {}
+    };
+    //let cookie_locale = negotiate()
     next.run(&cx.with(locale), body).await
 }
 
@@ -70,7 +80,7 @@ async fn home(cx: &Cx) -> Result<impl View> {
         hello(name: "World")
         <p>
             "The page is in: "
-            <i>(locale(cx))</i>
+            <i>(locale(cx).to_string())</i>
         </p>
     })
 }

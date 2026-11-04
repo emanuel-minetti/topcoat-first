@@ -1,4 +1,3 @@
-use topcoat::asset::{Asset, asset};
 use topcoat::{
     Result,
     icon::{icon, iconify::iconify_icon},
@@ -48,17 +47,11 @@ pub async fn navigation_menu(
     #[default] mut attrs: Attributes,
     #[default] child: Child<'_>,
 ) -> Result<impl View> {
-    const LOGO: Asset = asset!("assets/logo.svg");
-
     Ok(view! {
         <nav
-            class=(class!(
-                "relative flex items-center list-none bg-(--sidebar) pt-3 pb-7 mb-13",
-                attrs.remove("class"),
-            ))
+            class=(class!("relative flex items-center", attrs.remove("class")))
             (attrs)
         >
-            <a href="/"><img class=(class!("h-9 pr-10")) src=(LOGO) alt="the logo"></a>
             (child)
         </nav>
     })

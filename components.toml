@@ -11,3 +11,7 @@ file = "styles.css"
 [registries.topcoat.components.navigation_menu]
 hash = "sha256:4c9588bc122afb16de5d31674cd3d1b7fb07772759ff847d708139fcf58d0972"
 file = "src/components/navigation_menu.rs"
+
+[registries.topcoat.components.select]
+hash = "sha256:044fb72b888ef18e16ed17feeb495010f9aaad8fde8b0933ff750e66d612c9ff"
+file = "src/components/select.rs"
