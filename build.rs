@@ -9,5 +9,4 @@ fn main() {
         .input("styles.css")
         .render()
         .unwrap();
-
 }

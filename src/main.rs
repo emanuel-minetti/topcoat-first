@@ -1,28 +1,25 @@
 mod components;
 mod imprint;
+mod models;
 
-use crate::components::navigation_menu::{
-    navigation_menu, navigation_menu_item, navigation_menu_link, NavigationMenuLinkVariant,
-};
-use topcoat::asset::{asset, Asset, AssetBundle, RouterBuilderAssetExt};
+use crate::components::header::header;
+use topcoat::asset::{Asset, AssetBundle, RouterBuilderAssetExt, asset};
 use topcoat::context::Cx;
-use topcoat::font::fontsource::fontsource_font;
 use topcoat::font::Font;
-use topcoat::l10n::{accept_language, locale, negotiate, Locale};
+use topcoat::font::fontsource::fontsource_font;
+use topcoat::l10n::fluent::messages;
+use topcoat::l10n::{Locale, accept_language, locale, negotiate};
 use topcoat::router::response::Response;
-use topcoat::router::{href, layer, layout, Body, Next, RouterBuilderDiscoverExt, Slot};
-use topcoat::view::attributes;
+use topcoat::router::{Body, Next, RouterBuilderDiscoverExt, Slot, layer, layout};
 use topcoat::{
+    Result,
     router::{module_router, page},
     tailwind,
-    view::{component, view, View},
-    Result,
+    view::{View, component, view},
 };
-use topcoat::l10n::fluent::messages;
 
 const LOCALES: [Locale; 2] = [locale!("de"), locale!("en")];
 messages!("l10n/{locale}.ftl");
-
 
 #[tokio::main]
 async fn main() {
@@ -60,24 +57,7 @@ async fn root_layout(cx: &Cx, slot: Slot<'_>) -> Result<impl View> {
                 topcoat::dev::script()
             </head>
             <body>
-                navigation_menu(
-                    navigation_menu_item(
-                        navigation_menu_link(
-                            variant: NavigationMenuLinkVariant::Trigger,
-                            active: href!(home).is_current(cx),
-                            attrs: attributes! { href=(href!(home)) },
-                            "Home"
-                        )
-                    )
-                    navigation_menu_item(
-                        navigation_menu_link(
-                            variant: NavigationMenuLinkVariant::Trigger,
-                            active: href!(imprint::imprint).is_current(cx),
-                            attrs: attributes! { href=(href!(imprint::imprint)) },
-                            (t!(imprint))
-                        )
-                    )
-                )
+                header()
                 <main>(slot)</main>
             </body>
         </html>
@@ -88,7 +68,10 @@ async fn root_layout(cx: &Cx, slot: Slot<'_>) -> Result<impl View> {
 async fn home(cx: &Cx) -> Result<impl View> {
     Ok(view! {
         hello(name: "World")
-        <p>"The page is in: " (locale(cx))</p>
+        <p>
+            "The page is in: "
+            <i>(locale(cx))</i>
+        </p>
     })
 }
 

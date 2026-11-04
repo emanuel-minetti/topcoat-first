@@ -1,5 +1,5 @@
 use topcoat::router::page;
-use topcoat::view::{view, View};
+use topcoat::view::{View, view};
 
 #[page]
 pub async fn imprint() -> topcoat::Result<impl View> {

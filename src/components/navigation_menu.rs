@@ -1,10 +1,10 @@
+use topcoat::asset::{Asset, asset};
 use topcoat::{
     Result,
     icon::{icon, iconify::iconify_icon},
     runtime::Expr,
     view::{Attributes, Child, StaticClass, View, attributes, class, component, view},
 };
-use topcoat::asset::{asset, Asset};
 
 /// A row of site navigation links, some of which open a panel of further links.
 ///
@@ -52,7 +52,10 @@ pub async fn navigation_menu(
 
     Ok(view! {
         <nav
-            class=(class!("relative flex items-center list-none bg-(--sidebar) pt-3 pb-7 mb-13", attrs.remove("class")))
+            class=(class!(
+                "relative flex items-center list-none bg-(--sidebar) pt-3 pb-7 mb-13",
+                attrs.remove("class"),
+            ))
             (attrs)
         >
             <a href="/"><img class=(class!("h-9 pr-10")) src=(LOGO) alt="the logo"></a>
