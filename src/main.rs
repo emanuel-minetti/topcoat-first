@@ -45,7 +45,8 @@ async fn l10n_layer(cx: &Cx, body: Body, next: Next<'_>) -> Result<Response> {
     let jar = cookies(cx);
     let cookie_locale_option = jar.get("lang");
     if (cookie_locale_option.is_some())
-        && (cookie_locale_option.clone().unwrap().value() != locale.to_string())
+        && (cookie_locale_option.clone().unwrap().value() != locale.to_string()
+        && ["de", "en"].contains(&cookie_locale_option.clone().unwrap().value()))
     {
         locale = cookie_locale_option.unwrap().value().parse::<Locale>()?;
     }
