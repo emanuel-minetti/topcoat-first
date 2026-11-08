@@ -1,3 +1,4 @@
+use std::convert::Into;
 use crate::components::navigation_menu::{
     NavigationMenuLinkVariant, navigation_menu, navigation_menu_item, navigation_menu_link,
 };
@@ -13,18 +14,11 @@ use topcoat::router::error::{redirect};
 use topcoat::runtime::{shard, signal, Event};
 use topcoat::view::{View, attributes, class, view, component};
 use topcoat::{Result};
+use topcoat::icon::{icon, iconify, IconData};
 
 const LOGO: Asset = asset!("assets/logo.svg");
-
-#[shard]
-async fn set_lang_cookie(cx: &Cx, lang: String) -> Result<impl View> {
-    if lang != locale(cx).to_string() && [ "en", "de" ].contains(&lang.to_lowercase().as_str()) {
-            let jar = cookies(cx);
-            jar.add(cookie!("lang" = lang.to_owned()));
-            return Err::<(), topcoat::Error>(redirect("/").into());
-    }
-    Ok(())
-}
+const GERMAN_FLAG: IconData = iconify::iconify_icon!("openmoji:flag-germany");
+const ENGLISH_FLAG: IconData = iconify::iconify_icon!("openmoji:flag-united-kingdom");
 
 #[component]
 pub async fn header(cx: &Cx) -> Result<impl View> {
@@ -61,22 +55,44 @@ pub async fn header(cx: &Cx) -> Result<impl View> {
             )
             navigation_menu_item(
                 attrs: attributes! { class=(class!("ml-auto")) },
-                select(
-                    attrs: attributes! {
-                            @change=$(|e: Event| {
-                                lang.set(e.target.value);
-                        })
-                        }
-                    ,
-                    <option value="en" selected=(locale.to_string() == "en")>
-                        (t!(english))
-                    </option>
-                    <option value="de" selected=(locale.to_string() == "de")>
-                        (t!(german))
-                    </option>
-                )
+                lang_select()
+                // select(
+                //     attrs: attributes! {
+                //             @change=$(|e: Event| {
+                //                 lang.set(e.target.value);
+                //         })
+                //         }
+                //     ,
+                //     <option value="en" selected=(locale.to_string() == "en")>
+                //         (t!(english))
+                //         icon(data: ENGLISH_FLAG, label: "English Flag")
+                //     </option>
+                //     <option value="de" selected=(locale.to_string() == "de")>
+                //         (t!(german))
+                //     </option>
+                // )
                 set_lang_cookie(lang: lang.get())
             )
         )
     })
+}
+
+#[shard]
+async fn set_lang_cookie(cx: &Cx, lang: String) -> Result<impl View> {
+    if lang != topcoat::l10n::locale(cx).to_string() && [ "en", "de" ].contains(&lang.to_lowercase().as_str()) {
+        let jar = cookies(cx);
+        jar.add(cookie!("lang" = lang.to_owned()));
+        return Err::<(), topcoat::Error>(redirect("/").into());
+    }
+    Ok(())
+}
+
+#[component]
+async fn lang_select(cx: &Cx) -> Result<impl View> {
+    let lang = locale(cx);
+    let lang_str = lang.to_string();
+    let lang_icon = if lang_str == "de" {
+        GERMAN_FLAG} else { ENGLISH_FLAG  };
+
+    Ok(view!(<span class="mr-15 text-2xl align-middle inline-block">icon(data: lang_icon, label: "language selector")</span>))
 }
