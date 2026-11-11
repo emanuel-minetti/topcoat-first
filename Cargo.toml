@@ -1,7 +1,8 @@
 [package]
-name = "topcoat-first"
+name = "topcoat_first"
 version = "0.1.0"
 edition = "2024"
+default-run = "topcoat_first"
 
 [dependencies]
 tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros"] }
@@ -15,6 +16,10 @@ topcoat = { version = "0.11.0", features = [
     "cookie",
     "runtime"]
 }
+toasty = { version = "0.11.0", default-features = false, features = ["postgresql", "jiff"] }
+toasty-cli = "0.11.0"
+anyhow = "1.0.104"
+uuid = "1.29.2"
 
 [build-dependencies]
 topcoat = { version = "0.11.0", default-features = false, features = [
