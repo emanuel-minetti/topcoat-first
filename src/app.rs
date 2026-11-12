@@ -5,19 +5,17 @@ pub mod models;
 
 use crate::app::components::header::header;
 use topcoat::asset::{asset, Asset, AssetBundle, RouterBuilderAssetExt};
-use topcoat::context::Cx;
-use topcoat::cookie::{cookies, Cookies, RouterBuilderCookieExt};
+use topcoat::context::{BaseUrl, Cx};
+use topcoat::cookie::{cookies, CookieLayer, Cookies};
 use topcoat::font::fontsource::fontsource_font;
 use topcoat::font::Font;
 use topcoat::l10n::fluent::messages;
 use topcoat::l10n::{accept_language, locale, negotiate, Locale};
 use topcoat::router::response::Response;
-use topcoat::router::{
-    layer, layout, module_router, page, Body, Next, RouterBuilderDiscoverExt, Slot,
-};
-use topcoat::runtime::RouterBuilderRuntimeExt;
+use topcoat::router::{layer, layout, module_router, page, Body, Compression, Next, OriginPolicy, RouterBuilderDiscoverExt, Slot};
+use topcoat::runtime::{PrefetchMode, RuntimeLayer};
 use topcoat::tailwind;
-use topcoat::view::{component, view, View};
+use topcoat::view::{component, view, SuspenseMode, View};
 use topcoat::Result;
 
 const LOCALES: [Locale; 2] = [locale!("de"), locale!("en")];
@@ -26,10 +24,15 @@ messages!("l10n/{locale}.ftl");
 
 pub fn router() -> topcoat::router::RouterBuilder {
     module_router!()
+        .with(Compression::default().brotli(false))
+        .with(OriginPolicy::default())
+        .with(BaseUrl::new("http://localhost:3000"))
+        .with(PrefetchMode::default())
+        .with(SuspenseMode::default())
         .discover()
         .assets(AssetBundle::load().unwrap())
-        .cookies()
-        .runtime()
+        .layer(CookieLayer::new())
+        .layer(RuntimeLayer::new())
 }
 
 #[layer]
@@ -84,7 +87,7 @@ async fn home(cx: &Cx) -> Result<impl View> {
 }
 
 #[component]
-async fn hello(name: &str) -> Result<impl View> {
+async fn hello(cx: &Cx, name: &str) -> Result<impl View> {
     Ok(view! {
         <h1>
             "Hello, "

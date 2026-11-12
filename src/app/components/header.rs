@@ -1,6 +1,4 @@
-use crate::app::components::navigation_menu::{
-    navigation_menu, navigation_menu_item, navigation_menu_link, NavigationMenuLinkVariant,
-};
+use crate::app::components::navigation_menu::{navigation_menu, navigation_menu_item, navigation_menu_link, NavigationMenuLinkVariant};
 use crate::app::components::select::select;
 use crate::app::home;
 use crate::app::imprint::imprint;
@@ -8,7 +6,7 @@ use crate::app::t;
 use std::convert::Into;
 use topcoat::asset::{asset, Asset};
 use topcoat::context::Cx;
-use topcoat::cookie::{cookie, cookies, Cookies};
+use topcoat::cookie::{cookies, Cookies};
 use topcoat::icon::{icon, iconify, IconData};
 use topcoat::l10n::locale;
 use topcoat::router::error::redirect;
@@ -32,7 +30,7 @@ pub async fn header(cx: &Cx) -> Result<impl View> {
                     active: href!(home).is_current(cx),
                     attrs: attributes! { href=(href!(home)) class="mr-10" },
                     <img class=(class!("h-9")) src=(LOGO) alt="the logo">
-                    "Topcaot First"
+                    "Topcoat First"
                 )
             )
             navigation_menu_item(
@@ -117,8 +115,7 @@ async fn set_lang_cookie(cx: &Cx, lang: String) -> Result<impl View> {
     if lang != topcoat::l10n::locale(cx).to_string()
         && ["en", "de"].contains(&lang.to_lowercase().as_str())
     {
-        let jar = cookies(cx);
-        jar.add(cookie!("lang" = lang.to_owned()));
+        cookies(cx).add(("lang", lang.to_owned()));
         return Err::<(), topcoat::Error>(redirect("/").into());
     }
     Ok(())

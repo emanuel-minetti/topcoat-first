@@ -9,7 +9,7 @@ hash = "sha256:5e370e648fef95d78c8b048d99be7f7d79fd82132f8c9cc1ce854d3b73024137"
 file = "styles.css"
 
 [registries.topcoat.components.navigation_menu]
-hash = "sha256:4c9588bc122afb16de5d31674cd3d1b7fb07772759ff847d708139fcf58d0972"
+hash = "sha256:8ce44d70e861f3b7e8eba95133237cb9f60d0899415c76a9842705a9aae0b2b5"
 file = "src/components/navigation_menu.rs"
 
 [registries.topcoat.components.select]

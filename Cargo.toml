@@ -6,7 +6,7 @@ default-run = "topcoat_first"
 
 [dependencies]
 tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros"] }
-topcoat = { version = "0.11.0", features = [
+topcoat = { version = "0.12.1", features = [
     "icon-iconify",
     "asset",
     "ui",
@@ -22,7 +22,7 @@ anyhow = "1.0.104"
 uuid = "1.29.2"
 
 [build-dependencies]
-topcoat = { version = "0.11.0", default-features = false, features = [
+topcoat = { version = "0.12.1", default-features = false, features = [
     "icon-iconify",
     "tailwind"]
 }
