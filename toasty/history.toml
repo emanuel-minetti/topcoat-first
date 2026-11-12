@@ -1,0 +1,6 @@
+version = 1
+
+[[migrations]]
+id = 3529090490498606294
+name = "0000_add_users_table.sql"
+snapshot_name = "0000_snapshot.toml"
