@@ -1,5 +1,5 @@
-pub mod components;
-pub mod imprint;
+pub (crate) mod components;
+pub (crate) mod imprint;
 pub mod models;
 
 use crate::app::components::header::header;
@@ -77,7 +77,7 @@ async fn root_layout(cx: &Cx, slot: Slot<'_>) -> Result<impl View> {
 #[page]
 async fn home(cx: &Cx) -> Result<impl View> {
     Ok(view! {
-        hello(name: "World")
+        hello(name: "Emu")
         <p>
             "The page is in: "
             <i>(locale(cx).to_string())</i>

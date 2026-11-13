@@ -1,7 +1,13 @@
-use toasty::Model;
+use toasty::{Embed, Model};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Embed)]
+pub enum Language {
+    De,
+    En
+}
 
 #[derive(Debug, Model)]
-struct User {
+pub struct User {
     #[key]
     #[auto]
     id: uuid::Uuid,
@@ -11,6 +17,6 @@ struct User {
     username: String,
 
     name: String,
-    language: String,
+    language: Language,
     password_hash: String,
 }

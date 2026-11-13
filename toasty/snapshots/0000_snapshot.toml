@@ -29,7 +29,7 @@ storage_ty = "Text"
 id = { table = 0, index = 3 }
 name = "language"
 ty = "String"
-storage_ty = "Text"
+storage_ty = { Enum = { name = "language", variants = [{ name = "de" }, { name = "en" }] } }
 
 [[schema.tables.columns]]
 id = { table = 0, index = 4 }
