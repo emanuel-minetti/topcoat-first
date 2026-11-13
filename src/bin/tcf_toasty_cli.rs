@@ -1,5 +1,5 @@
 use toasty_cli::{Config, ToastyCli};
-use topcoat_first::app::db;
+use topcoat_first::db;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

@@ -1,5 +1,4 @@
 pub mod components;
-pub mod db;
 pub mod imprint;
 pub mod models;
 
