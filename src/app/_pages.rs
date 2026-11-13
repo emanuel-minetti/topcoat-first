@@ -29,7 +29,11 @@ async fn root_layout(cx: &Cx, slot: Slot<'_>) -> topcoat::Result<impl View> {
             </head>
             <body>
                 header()
-                <main>(slot)</main>
+                <main>
+                    <div class="container mx-auto px-4">
+                        (slot)
+                    </div>
+                </main>
             </body>
         </html>
     })
