@@ -1,10 +1,10 @@
+use topcoat::context::Cx;
 use topcoat::{
     Result,
     icon::{icon, iconify::iconify_icon},
     runtime::Expr,
     view::{Attributes, Child, StaticClass, View, attributes, class, component, view},
 };
-use topcoat::context::Cx;
 
 /// A row of site navigation links, some of which open a panel of further links.
 ///
@@ -44,7 +44,8 @@ use topcoat::context::Cx;
 /// }
 /// ```
 #[component]
-pub async fn navigation_menu( cx: &Cx,
+pub async fn navigation_menu(
+    cx: &Cx,
     #[default] mut attrs: Attributes,
     #[default] child: Child<'_>,
 ) -> Result<impl View> {
@@ -60,7 +61,8 @@ pub async fn navigation_menu( cx: &Cx,
 
 /// The list of items in a [`navigation_menu`].
 #[component]
-pub async fn navigation_menu_list(cx: &Cx,
+pub async fn navigation_menu_list(
+    cx: &Cx,
     #[default] mut attrs: Attributes,
     #[default] child: Child<'_>,
 ) -> Result<impl View> {
@@ -79,7 +81,8 @@ pub async fn navigation_menu_list(cx: &Cx,
 /// Pass either a top-level [`navigation_menu_link`], or a [`navigation_menu_trigger`]
 /// followed by its [`navigation_menu_content`]. `attrs` are forwarded to the `<li>`.
 #[component]
-pub async fn navigation_menu_item(cx: &Cx,
+pub async fn navigation_menu_item(
+    cx: &Cx,
     #[default] mut attrs: Attributes,
     #[default] child: Child<'_>,
 ) -> Result<impl View> {
@@ -114,7 +117,8 @@ const TRIGGER: StaticClass = class!(
 /// Pass its label as children. A chevron turns while the panel is open. `attrs` are
 /// forwarded to the `<button>`, with extra classes added to its classes.
 #[component]
-pub async fn navigation_menu_trigger(cx: &Cx,
+pub async fn navigation_menu_trigger(
+    cx: &Cx,
     #[default] mut attrs: Attributes,
     #[default] child: Child<'_>,
 ) -> Result<impl View> {
@@ -167,7 +171,8 @@ const LAYER: StaticClass = class!(
 /// forwarded to the panel `<div>`. Set its width and layout through extra classes,
 /// for example a grid of [`navigation_menu_link`]s.
 #[component]
-pub async fn navigation_menu_content(cx: &Cx,
+pub async fn navigation_menu_content(
+    cx: &Cx,
     #[default] mut attrs: Attributes,
     #[default] child: Child<'_>,
 ) -> Result<impl View> {
@@ -228,7 +233,8 @@ pub fn navigation_menu_link_variants(variant: NavigationMenuLinkVariant) -> Stat
 /// Pass the destination as `href` in `attrs`. `active` accepts a boolean or runtime
 /// expression and marks the link with `aria-current="page"`.
 #[component]
-pub async fn navigation_menu_link(cx: &Cx,
+pub async fn navigation_menu_link(
+    cx: &Cx,
     /// How the link is styled.
     #[default]
     variant: NavigationMenuLinkVariant,

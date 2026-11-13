@@ -1,19 +1,21 @@
-use crate::app::components::navigation_menu::{navigation_menu, navigation_menu_item, navigation_menu_link, NavigationMenuLinkVariant};
+use crate::app::components::navigation_menu::{
+    NavigationMenuLinkVariant, navigation_menu, navigation_menu_item, navigation_menu_link,
+};
 use crate::app::components::select::select;
 use crate::app::home;
 use crate::app::imprint::imprint;
 use crate::app::t;
 use std::convert::Into;
-use topcoat::asset::{asset, Asset};
+use topcoat::Result;
+use topcoat::asset::{Asset, asset};
 use topcoat::context::Cx;
-use topcoat::cookie::{cookies, Cookies};
-use topcoat::icon::{icon, iconify, IconData};
+use topcoat::cookie::{Cookies, cookies};
+use topcoat::icon::{IconData, icon, iconify};
 use topcoat::l10n::locale;
 use topcoat::router::error::redirect;
 use topcoat::router::href;
-use topcoat::runtime::{shard, signal, Event};
-use topcoat::view::{attributes, class, component, view, View};
-use topcoat::Result;
+use topcoat::runtime::{Event, shard, signal};
+use topcoat::view::{View, attributes, class, component, view};
 
 const LOGO: Asset = asset!("assets/logo.svg");
 const GERMAN_FLAG: IconData = iconify::iconify_icon!("openmoji:flag-germany");
