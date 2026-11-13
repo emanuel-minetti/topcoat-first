@@ -2,8 +2,8 @@ use crate::app::components::navigation_menu::{
     NavigationMenuLinkVariant, navigation_menu, navigation_menu_item, navigation_menu_link,
 };
 use crate::app::components::select::select;
-use crate::app::home;
-use crate::app::imprint::imprint;
+use crate::app::_pages::home::home;
+use crate::app::_pages::imprint::imprint;
 use crate::app::t;
 use std::convert::Into;
 use topcoat::Result;
@@ -118,7 +118,7 @@ async fn set_lang_cookie(cx: &Cx, lang: String) -> Result<impl View> {
         && ["en", "de"].contains(&lang.to_lowercase().as_str())
     {
         cookies(cx).add(("lang", lang.to_owned()));
-        return Err::<(), topcoat::Error>(redirect("/").into());
+        return Err::<(), topcoat::Error>(redirect("/home").into());
     }
     Ok(())
 }
