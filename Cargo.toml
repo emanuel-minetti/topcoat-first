@@ -14,12 +14,15 @@ topcoat = { version = "0.12.1", features = [
     "font-fontsource",
     "l10n-fluent",
     "cookie",
-    "runtime"]
+    "runtime",
+    "session"]
 }
 toasty = { version = "0.11.0", default-features = false, features = ["postgresql", "jiff"] }
 toasty-cli = "0.11.0"
 anyhow = "1.0.104"
 uuid = "1.29.2"
+jiff = "0.2.43"
+topcoat-core = "0.12.1"
 
 [build-dependencies]
 topcoat = { version = "0.12.1", default-features = false, features = [

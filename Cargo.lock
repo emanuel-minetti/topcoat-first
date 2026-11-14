@@ -4422,10 +4422,12 @@ name = "topcoat_first"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "jiff",
  "toasty",
  "toasty-cli",
  "tokio",
  "topcoat",
+ "topcoat-core",
  "uuid",
 ]
 

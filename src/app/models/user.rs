@@ -1,10 +1,5 @@
-use toasty::{Embed, Model};
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Embed)]
-pub enum Language {
-    De,
-    En
-}
+use toasty::Model;
+use crate::app::models::language::Language;
 
 #[derive(Debug, Model)]
 pub struct User {

@@ -1,5 +1,6 @@
 pub(crate) mod imprint;
 pub mod home;
+pub mod login;
 
 use crate::app::components::header::header;
 use topcoat::asset::{asset, Asset};
@@ -29,11 +30,7 @@ async fn root_layout(cx: &Cx, slot: Slot<'_>) -> topcoat::Result<impl View> {
             </head>
             <body>
                 header()
-                <main>
-                    <div class="container mx-auto px-4">
-                        (slot)
-                    </div>
-                </main>
+                <main><div class="container mx-auto px-4">(slot)</div></main>
             </body>
         </html>
     })
