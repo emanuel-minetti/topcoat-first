@@ -1,6 +1,6 @@
 pub mod app;
+pub mod components;
 pub mod db;
-
 
 #[tokio::main]
 async fn main() {

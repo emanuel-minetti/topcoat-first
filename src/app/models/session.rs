@@ -1,10 +1,13 @@
-use toasty::{Deferred, Model};
 use crate::app::models::user::User;
+use toasty::{Deferred, Model};
 
 #[derive(Debug, Model)]
 pub struct Session {
     #[key]
-    id: String,
+    #[auto]
+    id: uuid::Uuid,
+
+    token_hash: Vec<u8>,
 
     #[index]
     user_id: uuid::Uuid,
@@ -20,5 +23,6 @@ pub struct Session {
 
     expires_at: jiff::Timestamp,
 
+    #[default(None)]
     reevoked_at: Option<jiff::Timestamp>,
 }

@@ -1,10 +1,9 @@
-use crate::app::components::navigation_menu::{
-    NavigationMenuLinkVariant, navigation_menu, navigation_menu_item, navigation_menu_link,
-};
-use crate::app::components::select::select;
 use crate::app::_pages::home::home;
 use crate::app::_pages::imprint::imprint;
 use crate::app::t;
+use crate::components::navigation_menu::*;
+use crate::components::select::select;
+
 use std::convert::Into;
 use topcoat::Result;
 use topcoat::asset::{Asset, asset};

@@ -1,5 +1,6 @@
 CREATE TABLE "sessions" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "token_hash" BYTEA NOT NULL,
     "user_id" UUID NOT NULL,
     "created_at" TIMESTAMPTZ(6) NOT NULL,
     "updated_at" TIMESTAMPTZ(6) NOT NULL,

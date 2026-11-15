@@ -1,18 +1,20 @@
-pub (crate) mod components;
-pub mod models;
 pub mod _pages;
+pub(crate) mod components;
+pub mod models;
 
+use topcoat::Result;
 use topcoat::asset::{AssetBundle, RouterBuilderAssetExt};
 use topcoat::context::{BaseUrl, Cx};
-use topcoat::cookie::{cookies, CookieLayer, Cookies};
+use topcoat::cookie::{CookieLayer, Cookies, cookies};
 use topcoat::l10n::fluent::messages;
-use topcoat::l10n::{accept_language, locale, negotiate, Locale};
+use topcoat::l10n::{Locale, accept_language, locale, negotiate};
+use topcoat::router::error::redirect;
 use topcoat::router::response::Response;
-use topcoat::router::{layer, module_router, page, Body, Compression, Next, OriginPolicy, RouterBuilderDiscoverExt};
+use topcoat::router::{
+    Body, Compression, Next, OriginPolicy, RouterBuilderDiscoverExt, layer, module_router, page,
+};
 use topcoat::runtime::{PrefetchMode, RuntimeLayer};
 use topcoat::view::{SuspenseMode, View};
-use topcoat::Result;
-use topcoat::router::error::redirect;
 
 const LOCALES: [Locale; 2] = [locale!("de"), locale!("en")];
 
@@ -46,8 +48,6 @@ async fn l10n_layer(cx: &Cx, body: Body, next: Next<'_>) -> Result<Response> {
     }
     next.run(&cx.with(locale), body).await
 }
-
-
 
 #[page]
 async fn home(cx: &Cx) -> Result<impl View> {

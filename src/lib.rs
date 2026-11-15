@@ -1,2 +1,3 @@
-pub mod db;
 pub mod app;
+pub mod components;
+pub mod db;

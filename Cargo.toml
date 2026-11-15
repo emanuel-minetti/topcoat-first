@@ -22,7 +22,9 @@ toasty-cli = "0.11.0"
 anyhow = "1.0.104"
 uuid = "1.29.2"
 jiff = "0.2.43"
-topcoat-core = "0.12.1"
+serde = "1.0.229"
+argon2 = "0.6.0"
+password-hash = "0.6.1"
 
 [build-dependencies]
 topcoat = { version = "0.12.1", default-features = false, features = [

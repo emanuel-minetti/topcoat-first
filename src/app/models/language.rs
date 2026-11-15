@@ -4,7 +4,7 @@ use toasty::Embed;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Embed)]
 pub enum Language {
     De,
-    En
+    En,
 }
 
 impl Default for Language {

@@ -1,7 +1,7 @@
 use topcoat::context::Cx;
 use topcoat::l10n::locale;
 use topcoat::router::page;
-use topcoat::view::{component, view, View};
+use topcoat::view::{View, component, view};
 
 #[page]
 pub async fn home(cx: &Cx) -> topcoat::Result<impl View> {
