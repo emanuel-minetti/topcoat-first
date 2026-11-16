@@ -20,6 +20,7 @@ struct LoginFailed {
     username: String,
     username_error: Option<LoginError>,
     password_error: Option<LoginError>,
+    login_error: Option<LoginError>,
 }
 
 #[derive(Clone, Copy)]
@@ -45,6 +46,7 @@ pub async fn page(cx: &Cx) -> Result<impl View> {
     let username = failed.map(|failed| failed.username.as_str());
     let username_error = failed.and_then(|failed| failed.username_error);
     let password_error = failed.and_then(|failed| failed.password_error);
+    let login_error = failed.and_then(|failed| failed.login_error);
 
     let form_id = element_id(cx);
     let username_id = element_id(cx);
@@ -79,7 +81,9 @@ pub async fn page(cx: &Cx) -> Result<impl View> {
                             value=(username)
                             placeholder=(t!(login_username))
                             aria-invalid=(username_error.is_some().then_some("true"))
-                            aria-descibedby=(username_error.is_some().then_some(&username_error_id))
+                            aria-descibedby=(username_error
+                                .is_some()
+                                .then_some(&username_error_id))
                         }
                     )
                     if let Some(error) = username_error {
@@ -103,7 +107,9 @@ pub async fn page(cx: &Cx) -> Result<impl View> {
                             autocomplete="current-password"
                             placeholder=(t!(login_password))
                             aria-invalid=(password_error.is_some().then_some("true"))
-                            aria-descibedby=(password_error.is_some().then_some(&password_error_id))
+                            aria-descibedby=(password_error
+                                .is_some()
+                                .then_some(&password_error_id))
                         }
                     )
                     if let Some(error) = password_error {
@@ -114,6 +120,13 @@ pub async fn page(cx: &Cx) -> Result<impl View> {
                     }
                 )
             )
+            <div class="text-sm text-destructive">
+                (if let Some(error) = login_error {
+                    error.message().resolve(cx)
+                } else {
+                    std::borrow::Cow::Borrowed("")
+                })
+            </div>
             <button
                 type="submit"
                 class="my-3 bg-primary py-2 px-5 rounded text-white font-medium"
@@ -133,8 +146,9 @@ struct Credentials {
 #[route(POST)]
 async fn submit(cx: &Cx, Form(credentials): Form<Credentials>) -> Result<SeeOther> {
     let Credentials { username, password } = credentials;
-    let mut username_error = username.trim().is_empty().then_some(LoginError::UsernameMissing);
+    let username_error = username.trim().is_empty().then_some(LoginError::UsernameMissing);
     let password_error = password.trim().is_empty().then_some(LoginError::PasswordMissing);
+    let mut login_error = None;
 
     if username_error.is_none() && password_error.is_none() {
         if let Some(user) = User::authenticate(cx, &username, password).await? {
@@ -142,7 +156,7 @@ async fn submit(cx: &Cx, Form(credentials): Form<Credentials>) -> Result<SeeOthe
             return Ok(see_other(href!(crate::app::home).resolve(cx)));
         }
         else {
-            username_error = Some(LoginError::InvalidCredentials);
+            login_error = Some(LoginError::InvalidCredentials);
         }
     }
 
@@ -153,6 +167,7 @@ async fn submit(cx: &Cx, Form(credentials): Form<Credentials>) -> Result<SeeOthe
                 username,
                 username_error,
                 password_error,
+                login_error,
             })
             .into())
 }

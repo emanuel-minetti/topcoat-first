@@ -9,3 +9,13 @@ snapshot_name = "0000_snapshot.toml"
 id = 6313486836296772731
 name = "0001_add_session_table.sql"
 snapshot_name = "0001_snapshot.toml"
+
+[[migrations]]
+id = 5130498279495658990
+name = "0002_modify_session_table.sql"
+snapshot_name = "0002_snapshot.toml"
+
+[[migrations]]
+id = 7092541060418684252
+name = "0003_modify_session_table_2.sql"
+snapshot_name = "0003_snapshot.toml"

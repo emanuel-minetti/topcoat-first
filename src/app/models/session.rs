@@ -7,13 +7,14 @@ pub struct Session {
     #[auto]
     id: uuid::Uuid,
 
+    #[unique]
     token_hash: Vec<u8>,
 
     #[index]
     user_id: uuid::Uuid,
 
     #[belongs_to(key = user_id, references = id)]
-    user: Deferred<User>,
+    pub user: Deferred<User>,
 
     #[auto]
     created_at: jiff::Timestamp,
@@ -21,8 +22,8 @@ pub struct Session {
     #[auto]
     updated_at: jiff::Timestamp,
 
-    expires_at: jiff::Timestamp,
+    pub expires_at: jiff::Timestamp,
 
     #[default(None)]
-    reevoked_at: Option<jiff::Timestamp>,
+    pub revoked_at: Option<jiff::Timestamp>,
 }

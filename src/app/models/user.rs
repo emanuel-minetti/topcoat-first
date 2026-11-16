@@ -7,7 +7,7 @@ use topcoat::Result;
 use topcoat::router::error::internal_server_error;
 use crate::db::db;
 
-#[derive(Debug, Model)]
+#[derive(Debug, Clone, Model)]
 pub struct User {
     #[key]
     #[auto]
