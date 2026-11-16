@@ -11,10 +11,10 @@ pub struct Session {
     token_hash: Vec<u8>,
 
     #[index]
-    user_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
 
     #[belongs_to(key = user_id, references = id)]
-    pub user: Deferred<User>,
+    user: Deferred<User>,
 
     #[auto]
     created_at: jiff::Timestamp,

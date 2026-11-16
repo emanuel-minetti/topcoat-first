@@ -1,20 +1,20 @@
-use jiff::Timestamp;
 use crate::app::t;
+use jiff::Timestamp;
 
-use crate::app::models::user::User;
-use topcoat::Result;
-use topcoat::context::{try_context, Cx};
-use topcoat::internal::serde::Deserialize;
-use topcoat::l10n::Translation;
-use topcoat::router::error::{SeeOther, see_other, internal_server_error, rewrite};
-use topcoat::router::{href, page, route, Body, Method};
-use topcoat::router::content::Form;
-use topcoat::session;
-use topcoat::view::{View, element_id, view, attributes};
 use crate::app::models::session::Session;
+use crate::app::models::user::User;
 use crate::components::field::*;
 use crate::components::input::input;
 use crate::db::db;
+use topcoat::Result;
+use topcoat::context::{Cx, try_context};
+use topcoat::internal::serde::Deserialize;
+use topcoat::l10n::Translation;
+use topcoat::router::content::Form;
+use topcoat::router::error::{SeeOther, internal_server_error, rewrite, see_other};
+use topcoat::router::{Body, Method, href, page, route};
+use topcoat::session;
+use topcoat::view::{View, attributes, element_id, view};
 
 struct LoginFailed {
     username: String,
@@ -146,32 +146,36 @@ struct Credentials {
 #[route(POST)]
 async fn submit(cx: &Cx, Form(credentials): Form<Credentials>) -> Result<SeeOther> {
     let Credentials { username, password } = credentials;
-    let username_error = username.trim().is_empty().then_some(LoginError::UsernameMissing);
-    let password_error = password.trim().is_empty().then_some(LoginError::PasswordMissing);
+    let username_error = username
+        .trim()
+        .is_empty()
+        .then_some(LoginError::UsernameMissing);
+    let password_error = password
+        .trim()
+        .is_empty()
+        .then_some(LoginError::PasswordMissing);
     let mut login_error = None;
 
     if username_error.is_none() && password_error.is_none() {
         if let Some(user) = User::authenticate(cx, &username, password).await? {
             persist_session(cx, &user).await?;
             return Ok(see_other(href!(crate::app::home).resolve(cx)));
-        }
-        else {
+        } else {
             login_error = Some(LoginError::InvalidCredentials);
         }
     }
 
     // Rewrite the POST to keep the submitted email and errors in the request context.
     Err(rewrite(href!(page).resolve(cx), Body::empty())
-            .method(Method::GET)
-            .with(LoginFailed {
-                username,
-                username_error,
-                password_error,
-                login_error,
-            })
-            .into())
+        .method(Method::GET)
+        .with(LoginFailed {
+            username,
+            username_error,
+            password_error,
+            login_error,
+        })
+        .into())
 }
-
 
 async fn persist_session(cx: &Cx, user: &User) -> Result<()> {
     let session = session::start(cx).await?;
@@ -182,8 +186,9 @@ async fn persist_session(cx: &Cx, user: &User) -> Result<()> {
         user_id: user.id,
         expires_at,
     })
-        .exec(&mut db(cx))
-        .await.expect("Failed to persist session");
+    .exec(&mut db(cx))
+    .await
+    .expect("Failed to persist session");
 
     Ok(())
 }

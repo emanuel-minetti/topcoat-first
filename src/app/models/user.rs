@@ -1,11 +1,11 @@
+use crate::app::models::language::Language;
+use crate::db::db;
 use argon2::{Argon2, PasswordHash};
 use password_hash::PasswordVerifier;
-use crate::app::models::language::Language;
 use toasty::Model;
-use topcoat::context::Cx;
 use topcoat::Result;
+use topcoat::context::Cx;
 use topcoat::router::error::internal_server_error;
-use crate::db::db;
 
 #[derive(Debug, Clone, Model)]
 pub struct User {
@@ -17,7 +17,7 @@ pub struct User {
     #[column(type = varchar(24))]
     username: String,
 
-    name: String,
+    pub(crate) name: String,
     language: Language,
     password_hash: String,
 }
@@ -25,7 +25,10 @@ pub struct User {
 impl User {
     /// Checks the credentials and returns the user, or `None` if they do not match.
     pub async fn authenticate(cx: &Cx, username: &str, password: String) -> Result<Option<User>> {
-        let user = User::filter_by_username(username).first().exec(&mut db(cx)).await?;
+        let user = User::filter_by_username(username)
+            .first()
+            .exec(&mut db(cx))
+            .await?;
 
         let Some(user) = user else { return Ok(None) };
 

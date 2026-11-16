@@ -1,4 +1,4 @@
-use crate::app::_pages::home::home;
+use crate::app::_pages::home::page;
 use crate::app::_pages::imprint::imprint;
 use crate::app::t;
 use crate::components::navigation_menu::*;
@@ -28,8 +28,8 @@ pub async fn header(cx: &Cx) -> Result<impl View> {
             navigation_menu_item(
                 navigation_menu_link(
                     variant: NavigationMenuLinkVariant::Trigger,
-                    active: href!(home).is_current(cx),
-                    attrs: attributes! { href=(href!(home)) class="mr-10" },
+                    active: href!(page).is_current(cx),
+                    attrs: attributes! { href=(href!(page)) class="mr-10" },
                     <img class=(class!("h-9")) src=(LOGO) alt="the logo">
                     "Topcoat First"
                 )
@@ -37,8 +37,8 @@ pub async fn header(cx: &Cx) -> Result<impl View> {
             navigation_menu_item(
                 navigation_menu_link(
                     variant: NavigationMenuLinkVariant::Trigger,
-                    active: href!(home).is_current(cx),
-                    attrs: attributes! { href=(href!(home)) },
+                    active: href!(page).is_current(cx),
+                    attrs: attributes! { href=(href!(page)) },
                     (t!(home))
                 )
             )

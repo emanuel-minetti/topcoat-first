@@ -3,19 +3,19 @@ pub(crate) mod imprint;
 pub mod login;
 
 use crate::app::components::header::header;
+use crate::app::models::session::Session;
+use crate::app::models::user::User;
+use crate::db::db;
+use topcoat::Result;
 use topcoat::asset::{Asset, asset};
 use topcoat::context::Cx;
 use topcoat::font::Font;
 use topcoat::font::fontsource::fontsource_font;
 use topcoat::l10n::locale;
 use topcoat::router::{Slot, layout};
-use topcoat::{session, tailwind};
-use topcoat::view::{View, view};
-use topcoat::Result;
 use topcoat::session::TokenHash;
-use crate::app::models::session::Session;
-use crate::app::models::user::User;
-use crate::db::db;
+use topcoat::view::{View, view};
+use topcoat::{session, tailwind};
 
 #[layout]
 async fn root_layout(cx: &Cx, slot: Slot<'_>) -> Result<impl View> {
@@ -54,13 +54,14 @@ async fn load_session_user(cx: &Cx, token_hash: &TokenHash) -> Result<Option<Use
     if session.expires_at < now {
         return Ok(None);
     }
-    if session.revoked_at.is_some_and(|revoked_at| revoked_at < now) {
+    if session
+        .revoked_at
+        .is_some_and(|revoked_at| revoked_at < now)
+    {
         return Ok(None);
     }
 
-    let user = session.user.get();
+    let user = User::get_by_id(&mut db(cx), session.user_id).await?;
 
     Ok(Some(user.clone()))
 }
-
-

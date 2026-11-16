@@ -2,6 +2,7 @@ pub mod _pages;
 pub(crate) mod components;
 pub mod models;
 
+use std::time::Duration;
 use topcoat::Result;
 use topcoat::asset::{AssetBundle, RouterBuilderAssetExt};
 use topcoat::context::{BaseUrl, Cx};
@@ -14,6 +15,7 @@ use topcoat::router::{
     Body, Compression, Next, OriginPolicy, RouterBuilderDiscoverExt, layer, module_router, page,
 };
 use topcoat::runtime::{PrefetchMode, RuntimeLayer};
+use topcoat::session::SessionLifetime;
 use topcoat::view::{SuspenseMode, View};
 
 const LOCALES: [Locale; 2] = [locale!("de"), locale!("en")];
@@ -27,6 +29,7 @@ pub fn router() -> topcoat::router::RouterBuilder {
         .with(BaseUrl::new("http://localhost:3000"))
         .with(PrefetchMode::default())
         .with(SuspenseMode::default())
+        .with(SessionLifetime(Duration::from_hours(1)))
         .discover()
         .assets(AssetBundle::load().unwrap())
         .layer(CookieLayer::new())
