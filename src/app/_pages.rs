@@ -2,6 +2,7 @@ pub mod home;
 pub(crate) mod imprint;
 pub mod login;
 
+use jiff::Timestamp;
 use crate::app::components::header::header;
 use crate::app::models::session::Session;
 use crate::app::models::user::User;
@@ -62,6 +63,15 @@ async fn load_session_user(cx: &Cx, token_hash: &TokenHash) -> Result<Option<Use
     }
 
     let user = User::get_by_id(&mut db(cx), session.user_id).await?;
+    refresh_session(cx).await?;
 
     Ok(Some(user.clone()))
+}
+
+async fn refresh_session(cx: &Cx) -> Result<()> {
+    if let Some(session) = session::refresh(cx).await? {
+        Session::update_session_expiry(cx, session.token_hash, Timestamp::try_from(session.expires_at)?).await?;
+    }
+
+    Ok(())
 }
