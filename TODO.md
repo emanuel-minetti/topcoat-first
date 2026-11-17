@@ -1,0 +1,3 @@
+- Add Tooltips
+- Add Footer
+- Logging out
