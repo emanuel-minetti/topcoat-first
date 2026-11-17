@@ -15,6 +15,7 @@ use topcoat::router::error::redirect;
 use topcoat::router::href;
 use topcoat::runtime::{Event, shard, signal};
 use topcoat::view::{View, attributes, class, component, view};
+use crate::components::tooltip::{tooltip, tooltip_content};
 
 const LOGO: Asset = asset!("assets/logo.svg");
 const GERMAN_FLAG: IconData = iconify::iconify_icon!("openmoji:flag-germany");
@@ -71,15 +72,18 @@ async fn lang_select(cx: &Cx) -> Result<impl View> {
     let lang_signal = signal(cx, String::new);
 
     Ok(view!(
-        <span
-            class="mr-15 text-2xl align-middle inline-block"
-            :hidden=$(show_lang_select.get())
-            @click=$(|_e| {
-                show_lang_select.set(!show_lang_select.get());
-            })
-        >
-            icon(data: locale_icon, label: "language selector")
-        </span>
+        tooltip(
+            <span
+                class="mr-15 text-2xl align-middle inline-block"
+                :hidden=$(show_lang_select.get())
+                @click=$(|_e| {
+                    show_lang_select.set(!show_lang_select.get());
+                })
+            >
+                icon(data: locale_icon, label: "language selector")
+            </span>
+            tooltip_content((t!(lang_tooltip)))
+        )
         <span :hidden=$(!show_lang_select.get())>
             select(
                 attrs: attributes! {

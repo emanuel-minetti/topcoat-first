@@ -1,3 +1,3 @@
-- Add Tooltips
+- Modularize l10n
 - Add Footer
-- Logging out
+- Add logging out.

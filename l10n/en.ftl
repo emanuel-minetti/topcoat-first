@@ -4,6 +4,8 @@ imprint = Imprint
 english = English
 german = German
 
+lang_tooltip = Choose Your Language
+
 login_intro = Please login
 login_username = Username
 login_password = Password

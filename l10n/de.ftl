@@ -4,6 +4,8 @@ imprint = Impressum
 english = Englisch
 german = Deutsch
 
+lang_tooltip = Wählen Sie Ihre Sprache
+
 login_intro = Bitte melden Sie sich an
 login_username = Benutzername
 login_password = Passwort
