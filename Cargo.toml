@@ -25,6 +25,8 @@ jiff = "0.2.43"
 serde = "1.0.229"
 argon2 = "0.6.0"
 password-hash = "0.6.1"
+fluent-bundle = "0.16.0"
+
 
 [build-dependencies]
 topcoat = { version = "0.12.1", default-features = false, features = [
